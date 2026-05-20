@@ -1,65 +1,133 @@
-import Image from "next/image";
+import type { Metadata } from 'next'
+import { createClient } from '@/lib/supabase/server'
+import { CatalogClient } from '@/components/catalog/CatalogClient'
+import { SITE_URL, SITE_NAME, SITE_DESCRIPTION, SITE_TAGLINE } from '@/lib/seo/site'
+import type { ProdutoWithCategory } from '@/types/database'
 
-export default function Home() {
+/**
+ * Metadata dinâmica da home. Lê o nome configurado da loja e a quantidade
+ * de produtos ativos para deixar o título mais específico no Google.
+ */
+export async function generateMetadata(): Promise<Metadata> {
+  const supabase = await createClient()
+  const [{ data: settings }, { count: produtoCount }] = await Promise.all([
+    supabase.from('settings').select('nome_loja, mensagem_boas_vindas').maybeSingle(),
+    supabase.from('produtos').select('*', { count: 'exact', head: true }).eq('ativo', true),
+  ])
+
+  const nome = settings?.nome_loja ?? SITE_NAME
+  const totalLine = produtoCount && produtoCount > 0
+    ? ` · ${produtoCount} ${produtoCount === 1 ? 'produto' : 'produtos'} no cardápio`
+    : ''
+  const description =
+    settings?.mensagem_boas_vindas?.trim() ||
+    `${SITE_DESCRIPTION}${totalLine}`
+
+  return {
+    title: `${nome} — ${SITE_TAGLINE}`,
+    description,
+    alternates: { canonical: '/' },
+    openGraph: {
+      title: `${nome} — ${SITE_TAGLINE}`,
+      description,
+      url: SITE_URL,
+      siteName: nome,
+      type: 'website',
+      locale: 'pt_BR',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${nome} — ${SITE_TAGLINE}`,
+      description,
+    },
+  }
+}
+
+export default async function HomePage() {
+  const supabase = await createClient()
+
+  const [settingsResult, categoriesResult, produtosResult] = await Promise.all([
+    supabase.from('settings').select('*').maybeSingle(),
+    supabase.from('categories').select('*').order('ordem'),
+    supabase.from('produtos').select('*, categories(*)').eq('ativo', true).order('nome'),
+  ])
+
+  const settings = settingsResult.data
+  const produtos = (produtosResult.data as unknown as ProdutoWithCategory[]) ?? []
+
+  // ─── Structured Data (JSON-LD) ───────────────────────────────
+  // Dois schemas:
+  //   1. Bakery (negócio local) — ajuda no Google Maps/Knowledge Panel.
+  //   2. ItemList — lista os produtos do cardápio para rich results.
+  // Documentação: https://schema.org/Bakery + https://schema.org/ItemList
+  const nomeLoja = settings?.nome_loja ?? SITE_NAME
+  const whatsapp = settings?.whatsapp_number
+
+  const bakeryJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Bakery',
+    name: nomeLoja,
+    description: SITE_DESCRIPTION,
+    url: SITE_URL,
+    image: `${SITE_URL}/icon.svg`,
+    servesCuisine: 'Confeitaria',
+    priceRange: '$$',
+    ...(whatsapp && {
+      telephone: `+${whatsapp}`,
+      contactPoint: {
+        '@type': 'ContactPoint',
+        telephone: `+${whatsapp}`,
+        contactType: 'customer service',
+        availableLanguage: ['Portuguese'],
+      },
+    }),
+  }
+
+  const itemListJsonLd = produtos.length > 0 ? {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: `Cardápio ${nomeLoja}`,
+    numberOfItems: produtos.length,
+    itemListElement: produtos.slice(0, 30).map((p, idx) => ({
+      '@type': 'ListItem',
+      position: idx + 1,
+      item: {
+        '@type': 'Product',
+        name: p.nome,
+        ...(p.descricao && { description: p.descricao }),
+        ...(p.foto_url && { image: p.foto_url }),
+        ...(p.categories && { category: p.categories.nome }),
+        offers: {
+          '@type': 'Offer',
+          price: p.preco.toFixed(2),
+          priceCurrency: 'BRL',
+          availability: 'https://schema.org/InStock',
+          url: SITE_URL,
+        },
+      },
+    })),
+  } : null
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <>
+      {/* JSON-LD — invisível ao usuário, lido por crawlers (Google rich results) */}
+      <script
+        type="application/ld+json"
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD precisa ser raw
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(bakeryJsonLd) }}
+      />
+      {itemListJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }}
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
-  );
+      )}
+
+      <CatalogClient
+        settings={settings}
+        categories={categoriesResult.data ?? []}
+        produtos={produtos}
+      />
+    </>
+  )
 }

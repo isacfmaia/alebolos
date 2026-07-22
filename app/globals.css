@@ -70,20 +70,20 @@
 }
 
 /* ── Paleta da marca ─────────────────────────────────────── */
-/* Sincronizada com os hex exatos da logo:
-   #eb3121 (rose)  · #f67b0f (orange)  · #411501 (brown)  · #fef2e0 (cream) */
+/* Sincronizada com a identidade Bolos da Alê:
+   #fbf4ec (cream) · #d99a91 (rose) · #5b321f (brown) · #c79972 (gold) */
 :root {
   --font-geist: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-fraunces: ui-serif, Georgia, Cambria, 'Times New Roman', serif;
-  --brand-cream:       oklch(0.965 0.022 86);   /* #fef2e0 — fundo principal */
-  --brand-cream-dark:  oklch(0.925 0.035 82);   /* variação levemente mais quente */
-  --brand-rose-light:  oklch(0.92  0.07  29);   /* tint claro para badges/hovers */
-  --brand-rose:        oklch(0.59  0.22  29);   /* #eb3121 — CTA principal (Afeto) */
-  --brand-rose-dark:   oklch(0.48  0.22  26);   /* hover/active mais profundo */
-  --brand-orange:      oklch(0.71  0.18  51);   /* #f67b0f — acento vibrante (panela) */
-  --brand-gold:        oklch(0.80  0.13  82);   /* dourado quente */
-  --brand-brown-light: oklch(0.40  0.06  47);   /* texto secundário */
-  --brand-brown:       oklch(0.26  0.06  47);   /* #411501 calibrado para legibilidade */
+  --brand-cream:       oklch(0.975 0.011 72);   /* #fbf4ec - fundo principal */
+  --brand-cream-dark:  oklch(0.925 0.028 63);   /* rosé claro para superfícies */
+  --brand-rose-light:  oklch(0.90  0.045 31);   /* tint claro para badges/hovers */
+  --brand-rose:        oklch(0.70  0.075 29);   /* #d99a91 - CTA principal */
+  --brand-rose-dark:   oklch(0.58  0.085 30);   /* hover/active mais profundo */
+  --brand-orange:      oklch(0.72  0.075 56);   /* #c79972 - acento confeitaria */
+  --brand-gold:        oklch(0.78  0.08  70);   /* dourado suave */
+  --brand-brown-light: oklch(0.42  0.055 48);   /* texto secundário */
+  --brand-brown:       oklch(0.31  0.06  48);   /* #5b321f calibrado para legibilidade */
 }
 
 /* ── Tokens shadcn ───────────────────────────────────────── */
@@ -225,12 +225,12 @@
   );
 }
 
-/* Gradiente de marca — laranja → vermelho, ecoando a logo (#f67b0f → #eb3121) */
+/* Gradiente de marca - rosé suave inspirado na nova logo */
 @utility bg-gradient-rose {
   background-image: linear-gradient(
     135deg,
-    oklch(0.71 0.18 51) 0%,
-    oklch(0.55 0.22 29) 100%
+    oklch(0.76 0.075 42) 0%,
+    oklch(0.62 0.09 29) 100%
   );
 }
 

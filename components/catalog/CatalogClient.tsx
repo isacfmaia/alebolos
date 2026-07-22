@@ -7,6 +7,7 @@ import { ShoppingCart, Package } from 'lucide-react'
 import { toast } from 'sonner'
 import type { CategoryRow, SettingsRow, ProdutoWithCategory } from '@/types/database'
 import { useCartStore } from '@/lib/store/cart'
+import { SITE_LOGO_PATH, SITE_NAME, SITE_TAGLINE } from '@/lib/seo/site'
 import { ProdutoCard } from './ProdutoCard'
 import { CartSheet } from './CartSheet'
 
@@ -33,7 +34,7 @@ export function CatalogClient({ settings, categories, produtos }: Props) {
     [produtos, activeCategory],
   )
 
-  const storeName = settings?.nome_loja ?? 'Cardápio'
+  const storeName = settings?.nome_loja ?? SITE_NAME
 
   return (
     <div className="min-h-screen bg-gradient-warm">
@@ -43,12 +44,12 @@ export function CatalogClient({ settings, categories, produtos }: Props) {
           <Link href="/" className="group flex items-center gap-3">
             <div className="relative h-11 w-11 shrink-0 transition-transform duration-200 group-hover:scale-105">
               <Image
-                src="/logo_new.svg"
+                src={SITE_LOGO_PATH}
                 alt={storeName}
                 fill
                 priority
                 sizes="44px"
-                className="object-contain"
+                className="rounded-full object-cover"
               />
             </div>
             <div>
@@ -56,7 +57,7 @@ export function CatalogClient({ settings, categories, produtos }: Props) {
                 {storeName}
               </h1>
               <p className="mt-1 text-[10.5px] font-medium uppercase tracking-[0.16em] text-brand-brown/50">
-                Feito com afeto
+                {SITE_TAGLINE}
               </p>
             </div>
           </Link>

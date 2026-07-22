@@ -7,6 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Loader2, ArrowRight } from 'lucide-react'
+import { SITE_LOGO_PATH, SITE_NAME } from '@/lib/seo/site'
 
 const loginSchema = z.object({
   email: z.string().email('Email inválido'),
@@ -82,17 +83,17 @@ export default function AdminLoginPage() {
         <div className="mb-10 flex flex-col items-center gap-5">
           <div className="relative h-20 w-20 drop-shadow-[0_8px_24px_oklch(0.59_0.22_29/0.25)]">
             <Image
-              src="/logo_new.svg"
-              alt="Sabor e Afeto"
+              src={SITE_LOGO_PATH}
+              alt={SITE_NAME}
               fill
               priority
               sizes="80px"
-              className="object-contain"
+              className="rounded-full object-cover"
             />
           </div>
           <div className="text-center">
             <h1 className="font-heading text-[28px] font-semibold leading-none tracking-tight text-brand-brown">
-              Sabor e Afeto
+              {SITE_NAME}
             </h1>
             <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-brown/45">
               Área administrativa
@@ -184,7 +185,7 @@ export default function AdminLoginPage() {
         </div>
 
         <p className="mt-6 text-center text-[11px] font-medium text-brand-brown/40">
-          Sabor e Afeto · Confeitaria artesanal
+          {SITE_NAME} · Bolos artesanais
         </p>
       </div>
     </div>

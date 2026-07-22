@@ -76,7 +76,7 @@ export const useCartStore = create<CartStore>()(
       clear: () => set({ entries: [] }),
     }),
     {
-      name: 'saboreafeto-cart',
+      name: 'alebolos-cart',
       storage: createJSONStorage(() => localStorage),
       // skipHydration evita mismatch de SSR; rehydrate() é chamado no useEffect do CatalogClient
       skipHydration: true,

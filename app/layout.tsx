@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
 
   // Título: padrão para todas as páginas. `template` aplica em sub-rotas que
-  // exportam `title` simples (ex: { title: 'Pedido #42' } vira "Pedido #42 · Sabor e Afeto").
+  // exportam `title` simples (ex: { title: 'Pedido #42' } vira "Pedido #42 · Bolos da Alê").
   title: {
     default: `${SITE_NAME} — ${SITE_TAGLINE}`,
     template: `%s · ${SITE_NAME}`,
@@ -87,8 +87,8 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#fef2e0' },
-    { media: '(prefers-color-scheme: dark)', color: '#411501' },
+    { media: '(prefers-color-scheme: light)', color: '#fbf4ec' },
+    { media: '(prefers-color-scheme: dark)', color: '#5b321f' },
   ],
 }
 

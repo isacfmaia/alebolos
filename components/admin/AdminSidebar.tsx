@@ -15,6 +15,7 @@ import {
 } from 'lucide-react'
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
+import { SITE_LOGO_PATH, SITE_NAME } from '@/lib/seo/site'
 
 type NavItem = {
   href: string
@@ -98,17 +99,17 @@ export function AdminSidebar({ userEmail, isOpen = false, onClose }: AdminSideba
         <Link href="/admin" className="group flex min-w-0 items-center gap-3">
           <div className="relative h-11 w-11 shrink-0 transition-transform duration-200 group-hover:scale-105">
             <Image
-              src="/logo_new.svg"
-              alt="Sabor e Afeto"
+              src={SITE_LOGO_PATH}
+              alt={SITE_NAME}
               fill
               priority
               sizes="44px"
-              className="object-contain"
+              className="rounded-full object-cover"
             />
           </div>
           <div className="min-w-0">
             <p className="font-heading text-[15px] font-semibold leading-tight text-brand-brown tracking-tight">
-              Sabor e Afeto
+              {SITE_NAME}
             </p>
             <p className="mt-0.5 text-[10.5px] font-medium uppercase tracking-[0.14em] text-brand-brown/50">
               Admin

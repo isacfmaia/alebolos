@@ -124,7 +124,7 @@ export function SettingsFormClient({ settings }: Props) {
             <input
               id="nome_loja"
               {...register('nome_loja')}
-              placeholder="Ex: Sabor e Afeto Confeitaria"
+              placeholder="Ex: Bolos da Alê"
               className={inputCls(!!errors.nome_loja) + ' h-10'}
             />
             {errors.nome_loja && (

@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Menu } from 'lucide-react'
+import { SITE_LOGO_PATH, SITE_NAME } from '@/lib/seo/site'
 import { AdminSidebar } from './AdminSidebar'
 
 /**
@@ -77,16 +78,16 @@ export function AdminShell({
         <Link href="/admin" className="flex items-center gap-2">
           <div className="relative h-8 w-8 shrink-0">
             <Image
-              src="/logo_new.svg"
-              alt="Sabor e Afeto"
+              src={SITE_LOGO_PATH}
+              alt={SITE_NAME}
               fill
               priority
               sizes="32px"
-              className="object-contain"
+              className="rounded-full object-cover"
             />
           </div>
           <span className="font-heading text-sm font-semibold tracking-tight text-brand-brown">
-            Sabor e Afeto
+            {SITE_NAME}
           </span>
         </Link>
       </header>

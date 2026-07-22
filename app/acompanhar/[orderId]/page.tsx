@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/server'
 import { formatBRL } from '@/lib/utils/order'
 import { ORDER_STATUS_LABELS, type OrderStatus } from '@/types/database'
 import { PrazoBadge } from '@/components/ui/PrazoBadge'
+import { SITE_LOGO_PATH, SITE_NAME } from '@/lib/seo/site'
 import { CheckCircle2, Circle, Clock, ExternalLink, XCircle } from 'lucide-react'
 
 type Props = { params: Promise<{ orderId: string }> }
@@ -62,12 +63,12 @@ export default async function TrackingPage({ params }: Props) {
         <div className="text-center">
           <div className="relative mx-auto h-16 w-16 drop-shadow-[0_4px_12px_oklch(0.59_0.22_29/0.18)]">
             <Image
-              src="/logo_new.svg"
-              alt="Sabor e Afeto"
+              src={SITE_LOGO_PATH}
+              alt={SITE_NAME}
               fill
               priority
               sizes="64px"
-              className="object-contain"
+              className="rounded-full object-cover"
             />
           </div>
           <h1 className="font-heading mt-3 text-2xl font-bold text-brand-brown">

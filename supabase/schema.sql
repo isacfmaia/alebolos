@@ -1,5 +1,5 @@
 -- =============================================================
--- Sabor e Afeto — Schema
+-- Bolos da Alê — Schema
 -- Execute no SQL Editor do painel Supabase (Settings → SQL Editor)
 -- =============================================================
 
@@ -145,8 +145,8 @@ INSERT INTO categories (nome, ordem) VALUES
 INSERT INTO settings (whatsapp_number, nome_loja, mensagem_boas_vindas, formas_pagamento)
 VALUES (
            '5511999999999',
-           'Sabor e Afeto',
-           'Olá! Seja bem-vindo(a) ao cardápio da Sabor e Afeto 🎂',
+           'Bolos da Alê',
+           'Olá! Seja bem-vindo(a) ao cardápio da Bolos da Alê 🎂',
            '["PIX", "Dinheiro", "Cartão de crédito", "Cartão de débito"]'::jsonb
        )
     ON CONFLICT DO NOTHING;

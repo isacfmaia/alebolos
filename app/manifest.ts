@@ -20,8 +20,8 @@ export default function manifest(): MetadataRoute.Manifest {
     scope: '/',
     display: 'standalone',
     orientation: 'portrait',
-    background_color: '#fef2e0', // brand-cream
-    theme_color: '#eb3121',      // brand-rose (combina com a logo)
+    background_color: '#fbf4ec',
+    theme_color: '#d99a91',
     lang: 'pt-BR',
     dir: 'ltr',
     categories: ['food', 'shopping', 'lifestyle'],
